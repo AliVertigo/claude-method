@@ -45,9 +45,8 @@ are consistent every time. Each phase has a **gate**: don't advance until it's m
   worktree** (`git worktree add <path> -b <branch> origin/main`) — shared working trees
   cause branch/HEAD collisions.
 - Implement matching the surrounding code's patterns and conventions.
-- **Static review loop:** review the diff for bugs/security/quality (use a `/codex-review`
-  or `/code-review` skill if available; else self-review critically, or spawn a review
-  sub-agent) → fix → re-review until clean.
+- **Static review loop:** run `/code-review` on the diff (Codex-first; falls back to review
+  sub-agents) → fix → re-review until clean.
 - **Gate:** change complete on the branch, review-clean.
 
 ### 4. Verify (claim ≠ proof)

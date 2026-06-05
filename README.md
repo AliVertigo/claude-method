@@ -20,7 +20,7 @@ Four small, self-contained skills — `method` orchestrates the other three:
 |---|---|
 | **`method`** | The loop. Runs any plan-grade task through Understand → … → Close, calling the others at the right gates. Trivial work is exempt. |
 | **`premortem`** | Stress-tests the plan *before* building: assume it failed, work backward, fix the blind spots. |
-| **`code-review`** | Independent review of the diff (bugs / security / external-contract / quality), then fix by severity. Reviewer-agnostic. |
+| **`code-review`** | Independent review of the diff (bugs / security / external-contract / quality), then fix by severity. **Codex-first** — asks once if Codex isn't installed, then remembers your choice. |
 | **`postmortem`** | Blameless root-cause when something actually went wrong; a 2-line retro-note when it didn't. |
 
 `premortem`, `code-review`, and `postmortem` work standalone too — useful on their own, not
