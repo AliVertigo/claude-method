@@ -14,8 +14,9 @@ description: >
 You are starting a piece of work. Run it through ONE repeatable loop so quality and process
 are consistent every time. Each phase has a **gate**: don't advance until it's met.
 
-> This bundle ships companion skills — `/premortem`, `/code-review`, `/postmortem` — invoked
-> at the steps below. Use them where named; if the project ships a richer version, prefer it.
+> This bundle ships `/premortem`, `/codex-review`, `/postmortem`. The **second** review pass
+> uses Claude Code's built-in `/code-review` — a *different engine* than Codex, so the two
+> catch different blind spots. Prefer richer project-specific versions where a project ships them.
 
 ## 0. Triage: trivial or plan-grade?
 - **Trivial** (typo, one-line doc/comment, single config value, version bump, obvious
@@ -24,6 +25,12 @@ are consistent every time. Each phase has a **gate**: don't advance until it's m
   contract, anything you'd want to think before doing) → run the full loop.
 
 ## The loop
+
+**Full sequence:** plan → `/premortem` → write code → **`/codex-review`** (OpenAI) → run +
+real-data check → open PR → **`/code-review`** (Claude's own; fix every finding scored ≥ 20)
+→ merge → `/postmortem` → final commit. Two review passes by **two different engines** is the
+point — each catches what the other misses. Each phase below has a **gate**: don't advance
+until it's met.
 
 ### 1. Understand
 - Restate the task in your own words. Read the relevant code — don't guess.
@@ -45,20 +52,20 @@ are consistent every time. Each phase has a **gate**: don't advance until it's m
   worktree** (`git worktree add <path> -b <branch> origin/main`) — shared working trees
   cause branch/HEAD collisions.
 - Implement matching the surrounding code's patterns and conventions.
-- **Static review loop:** run `/code-review` on the diff (Codex-first; falls back to review
-  sub-agents) → fix → re-review until clean.
-- **Gate:** change complete on the branch, review-clean.
+- **Codex Review:** run `/codex-review` on the diff — a reviewer **independent of the agent
+  that wrote the code** (OpenAI Codex). Fix findings → re-review until Codex is clean. (Falls
+  back to review sub-agents if Codex isn't installed — see the `codex-review` skill.)
+- **Gate:** change complete on the branch, Codex-review clean.
 
 ### 4. Verify (claim ≠ proof)
+- **Code execution:** actually run it — the tests, the app, the real path. "Compiles" ≠ "works".
 - **Real-data validation — the most important gate.** If correctness depends on the actual
   *shape* of data from an external system (a third-party API response, DB rows, a file
   format, another service's or model's output), you MUST validate against the REAL thing: a
   live read-only call or a genuine sample. Mocked/hand-written fixtures prove your *logic*,
   NOT that your assumption about the external shape is correct. "All tests green" routinely
   ships a no-op when the real shape differs.
-- Run the project's checks: tests, lint, build, type-check, CI-equivalent.
-- Fix findings by **severity**: Critical/High → fix (merge blocker); Low/Nit → log with a
-  one-line reason, **no silent drops**.
+- Run the project's checks green: tests, lint, build, type-check, CI-equivalent.
 - **Gate:** real-data validated (or "N/A" stated explicitly) + checks green.
 
 ### 5. Ship
@@ -67,14 +74,18 @@ are consistent every time. Each phase has a **gate**: don't advance until it's m
   - **Write/read path:** what data does this code produce, and who consumes it? (If nothing
     consumes it yet, label that explicitly and set a date to wire it up.)
   - **Verification** evidence + **rollback** (how to undo).
-- CI green → squash-merge. (If the work is analysis/decision rather than code → deliver a
-  clear written report instead of a PR.)
-- **Gate:** merged + CI green, or report delivered.
+- **Code Review:** run Claude's own `/code-review` on the PR — a *second, different engine*
+  from the Codex pass. Score each finding 0-100 (impact × confidence); **fix every finding
+  scored ≥ 20**, log the rest with a one-line reason (**no silent drops**).
+- CI green + review-clean → squash-merge. (If the work is analysis/decision rather than code
+  → deliver a clear written report instead of a PR.)
+- **Gate:** merged + CI green + both reviews addressed, or report delivered.
 
 ### 6. Close
-- **Retrospective:** did each step catch something the previous one missed? A clean run →
-  a 2-line retro-note; something actually broke → a real root-cause (use a `/postmortem`
-  skill if available). Fix anything it surfaces.
+- **Postmortem:** run `/postmortem`. A clean run → a 2-line retro-note; something actually
+  broke → a real root-cause. Fix anything it surfaces, then **final commit**.
+- **Retrospective angle:** did each step catch something the previous one missed? (If the two
+  reviews never find anything the other didn't, thin them later — let data decide.)
 - Update project state/docs. Capture **stable** lessons (patterns, decisions) into the
   project's memory — not volatile state.
 - **Gate:** state reflects reality; next step is clear.
@@ -84,7 +95,9 @@ are consistent every time. Each phase has a **gate**: don't advance until it's m
 - **More AI-review passes ≠ more correctness.** Several reviews can share one blind spot;
   a single real-data check is worth more than another review pass.
 - **Premortem before, retro after.** Cheap foresight up front; honest hindsight at the end.
-- **Severity-tier, never silent-drop.** Fix what matters, log the rest with a reason.
+- **Two engines beat one.** An independent reviewer (Codex) plus Claude's own `/code-review`
+  catch different classes — don't collapse them into one pass.
+- **Fix what's real, never silent-drop.** Fix findings that matter (e.g. score ≥ 20); log the rest.
 - **Don't fabricate.** Flag unknowns, cite evidence, say "I don't know."
 
 ## Adapting to the project

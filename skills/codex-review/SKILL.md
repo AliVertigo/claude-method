@@ -1,14 +1,15 @@
 ---
-name: code-review
+name: codex-review
 description: >
-  Independent review of a code change (the current diff or a PR) for bugs, security, and
-  quality — then fix the real findings. Triggers on "code review", "review this", "review
-  the diff", "check this code", "review başlat". Prefers the Codex CLI for a strong
-  independent review; if Codex isn't installed it asks ONCE, and never nags again if you
-  opt out.
+  Review a code change (the current diff or a PR) with the **Codex CLI** — a reviewer
+  independent of the agent that wrote the code — then fix the real findings. Triggers on
+  "codex review", "codex this", "run codex", "/codex-review", "codex ile review et". If Codex
+  isn't installed it asks ONCE and never nags again if you opt out (then falls back to review
+  sub-agents). This is the *first* review pass; for Claude's own review, use the built-in
+  /code-review.
 ---
 
-# Code review
+# Codex review
 
 Review a diff with fresh, skeptical eyes and fix what's real — a second INDEPENDENT look,
 because one look (even the author's careful one) always has a blind spot.
