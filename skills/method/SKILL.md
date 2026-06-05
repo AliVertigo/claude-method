@@ -14,6 +14,9 @@ description: >
 You are starting a piece of work. Run it through ONE repeatable loop so quality and process
 are consistent every time. Each phase has a **gate**: don't advance until it's met.
 
+> This bundle ships companion skills — `/premortem`, `/code-review`, `/postmortem` — invoked
+> at the steps below. Use them where named; if the project ships a richer version, prefer it.
+
 ## 0. Triage: trivial or plan-grade?
 - **Trivial** (typo, one-line doc/comment, single config value, version bump, obvious
   one-liner) → say "trivial — skipping the loop", do it, verify, done.
