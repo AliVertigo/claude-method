@@ -40,6 +40,8 @@ Most "process" is ignored or theatre. This keeps only the rules that earn their 
 - **Mechanical gates beat willpower.** Automate the check, or it decays.
 - **Premortem before, retrospect after.** Cheap foresight up front; honest hindsight at end.
 - **Fix what's real, never silent-drop.** Fix findings that matter; log the rest with a reason.
+- **Dates don't decide; triggers do.** Pilots, shadow modes, and observation windows get a
+  scheduled end check, or they quietly outlive their decision date.
 - **Don't fabricate.** Flag unknowns, cite evidence, say "I don't know."
 
 ## Install (Claude Code)
@@ -73,7 +75,7 @@ Full loop in [`skills/method/SKILL.md`](./skills/method/SKILL.md). Each phase ha
 | Phase | Gate |
 |---|---|
 | **1. Understand** | Can state *what* / *why* / *which files* in one paragraph; no guessing |
-| **2. Plan** | Premortem done; approach + scope clear; sign-off if risky |
+| **2. Plan** | Premortem done; approach + scope clear; sign-off if risky; end trigger for any time-boxed window |
 | **3. Build** | Feature branch (isolated worktree if shared); **`/codex-review`** clean |
 | **4. Verify** | Code executed; **real-data validated** (or "N/A"); checks green |
 | **5. Ship** | PR + **Claude `/code-review`** (fix findings ≥ 20); CI green → merge |

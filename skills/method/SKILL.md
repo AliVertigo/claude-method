@@ -44,7 +44,13 @@ until it's met.
   then design against them. (Use a `/premortem` skill if available; else do it inline.)
 - If it's risky or touches protected resources (prod config, secrets, DB, CI/workflows,
   infra), or scope is unclear → confirm with the user before building.
-- **Gate:** approach clear, premortem done, user sign-off if needed.
+- **Time-boxed windows** (pilot, shadow mode, observation period): write the end date, the
+  decision owner, and a trigger — a scheduled read-only analysis or a reminder — into the
+  plan. A date that lives only in a doc or a tracker checkbox is not a trigger; the window
+  silently runs past it. Evidence that answers the decision early goes to the owner now, not
+  to a later phase. A backtest or replay is not a live prediction unless the sample matches.
+- **Gate:** approach clear, premortem done, user sign-off if needed, every time-boxed window
+  has an end trigger.
 
 ### 3. Build
 - Work on a **feature branch**, never directly on main.
@@ -86,6 +92,8 @@ until it's met.
   broke → a real root-cause. Fix anything it surfaces, then **final commit**.
 - **Retrospective angle:** did each step catch something the previous one missed? (If the two
   reviews never find anything the other didn't, thin them later — let data decide.)
+- **Follow-up:** if what shipped has an observation window, confirm its end trigger exists
+  (date · owner · mechanism); otherwise create it or report it as an open item.
 - Update project state/docs. Capture **stable** lessons (patterns, decisions) into the
   project's memory — not volatile state.
 - **Gate:** state reflects reality; next step is clear.
@@ -98,6 +106,7 @@ until it's met.
 - **Two engines beat one.** An independent reviewer (Codex) plus Claude's own `/code-review`
   catch different classes — don't collapse them into one pass.
 - **Fix what's real, never silent-drop.** Fix findings that matter (e.g. score ≥ 20); log the rest.
+- **Dates don't decide; triggers do.** A decision date without a scheduled check gets missed.
 - **Don't fabricate.** Flag unknowns, cite evidence, say "I don't know."
 
 ## Adapting to the project
